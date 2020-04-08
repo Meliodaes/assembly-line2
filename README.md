@@ -1,5 +1,5 @@
 # Assembly Line²
-Assembly Line² ia an unofficial port of the mobile game Assembly Line (made with heart and HTML).
+Assembly Line² ia an unofficial port of the mobile game Assembly Line (made with heart and HTML).  
 This port keeps orignal "mind" of the game, with some adjustments. _(keep in mind that it's in WIP)_
 
 ### Actual State :
@@ -15,5 +15,5 @@ Currently, I need to structure HTML code and start building "core" system in JS.
 - [ ] Remove structures
 - [ ] Some blueprints !
 
-### Autor :
+### Author :
 @SwnCake :)
