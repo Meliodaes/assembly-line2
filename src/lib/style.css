@@ -1,16 +1,48 @@
 body {
     height: 100vh; width: 100vw;
-    margin: 0; padding: 0;
-    background: #333; color: white;
+    margin: 0; padding: 0; display: flex;
+    background: #333; color: black;
     font-family: 'Source Sans Pro', sans-serif;
-}
-
-.app {
-    display: flex; width: 100vw; height: 100vh;
     justify-content: center; align-items: center;
 }
 
-.base {
-    width: 35vw; height: 100vh;
-    background: white;
+
+/*-------------------- Base --------------------*/
+
+.app {
+    width: 768px; height: 100vh; background: #7c0000;
 }
+
+.base {
+    width: 768px; height: 100vh; 
+    display: flex; justify-content: center; 
+    align-items: center; flex-direction: column;
+}
+
+canvas {
+    border: 5px solid black; background: url(../media/background.png);
+}
+
+
+/*-------------------- Overlay --------------------*/
+
+.ui_s_creation {
+    height: 50px; width: 400px;
+    background: #00a3e8; border: 1px solid #0072a4;
+    border-radius: 10px; position: absolute;
+    bottom: 10px; left: calc(50% - 200px);
+}
+
+.ui_b_build {
+    height: 50px; width: 50px;
+    border-radius: 10px 0 0 10px;
+    padding: 0; margin: 0; outline: none;
+    background: none; border: none;
+    cursor: pointer; display: flex;
+    justify-content: center; align-items: center;
+    border-right: 2px solid #0072a4;
+}
+
+.ui_b_build img:active {height: 25px; width: 25px;}
+
+.ui_b_build img {height: 30px; width: 30px;}
