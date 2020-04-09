@@ -16,5 +16,5 @@ I started to make the overlay (UI).
 - [ ] Remove structures
 - [ ] Some blueprints !
 
-### Autor :
+### Author :
 @SwnCake :)
