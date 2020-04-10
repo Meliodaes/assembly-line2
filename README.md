@@ -3,17 +3,20 @@ Assembly Line² is an unofficial port of the mobile game Assembly Line (made wit
 This port keeps orignal "mind" of the game, with some adjustments. _(keep in mind that it's a WIP)_
 
 ### Actual State :
-Starting the overlay, with "build" menu.
+Ability to place module (Starter) on map !
 
 ### RoadMap :
 ##### April :
 - [x] HTML / JS base (100%)
-- [ ] 'Overlaying' (10%)
-- [ ] Add ressources tiles (and "Starter" if possible)
-##### May :
+- [ ] 'Overlaying' (15%)
+- [x] Add "Starter" (100%)
+- [ ] Add ressources tiles
 - [ ] Move structures (and rotate)
 - [ ] Remove structures
+
+##### May :
 - [ ] Some blueprints !
+- [ ] Time gesture
 
 ### Author :
 @SwnCake :)

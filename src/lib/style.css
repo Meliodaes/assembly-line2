@@ -26,15 +26,15 @@ canvas {
 }
 
 
-/*-------------------- Overlay --------------------*/
+/*-------------------- UI --------------------*/
 
-.ui_s_creation {
+.ui_group_creation {
     height: 50px; width: 400px; bottom: 10px;
     background: #00a3e8; border: 1px solid #0072a4;
     border-radius: 10px; position: absolute;
 }
 
-.ui_b_build {
+.ui_btn_build {
     height: 50px; width: 50px;
     border-radius: 10px 0 0 10px;
     background: none; border: none;
@@ -43,8 +43,31 @@ canvas {
     border-right: 2px solid #0072a4; outline: none;
 }
 
-.ui_b_build img:active {height: 25px; width: 25px;}
-.ui_b_build img {height: 30px; width: 30px;}
+.ui_btn_build img:active {height: 25px; width: 25px;}
+.ui_btn_build img {height: 30px; width: 30px;}
+
+
+/*---------- Btn Yes/No ----------*/
+
+.ui_btn_yesno {height: 50px; position: absolute; bottom: 75px;}
+.ui_btn_yesno button:active {font-size: 18px;}
+
+.ui_btn_yes {
+    height: 50px; width: 50px;
+    background: #73BFB8; outline: 0;
+    border: 2px solid #478882; border-radius: 10px;
+    font-family: 'VT323', monospace; font-size: 21px;
+}
+
+.ui_btn_no {
+    height: 50px; width: 50px;
+    background: #cc2525; outline: 0;
+    border: 2px solid #981616; border-radius: 10px;
+    font-family: 'VT323', monospace; font-size: 21px;
+}
+
+
+/*-------------------- Overlay --------------------*/
 
 .overlay_build {
     height: 600px; width: 400px;
@@ -53,10 +76,14 @@ canvas {
     border: 10px solid #633200; border-radius: 20px;
 }
 
-.starter_s {
+.overlay_build button {
     height: 75px; width: 350px; display: flex; outline: 0;
     background: #3c3c3c; margin-top: 10px; font-size: 24px;
     border: 1px solid black; border-radius: 5px;
     align-items: center; justify-content: center;
     font-family: 'VT323', monospace; color: white;
+}
+
+.overlay_build img {
+    margin-right: 20px; transform: rotate(180deg);
 }

@@ -1,15 +1,16 @@
 //-------------------- Init --------------------
 
+//DOM :
+const buildMenu = document.querySelector('.overlay_build');
+const yesNoBtn = document.querySelector('.ui_btn_yesno');
+
 //Canvas + img :
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-var testImg;
+var starterImg, moduleType, placing=false;
 
 //Cancel selection
 document.onselectstart = (e) => {e.preventDefault();}; 
-
-//DOM :
-var buildMenu = document.querySelector('.overlay_build');
 
 
 //-------------------- Load and draw image --------------------
@@ -24,7 +25,7 @@ function loadImg(url){
     });
 }
 
-loadImg('src/media/test.png').then(img => testImg=img);
+loadImg('src/media/starter.png').then(img => starterImg=img);
 
 
 //-------------------- Canvas mapping --------------------
@@ -43,26 +44,27 @@ for(var i=0;i<16;i++){
 
 canvas.addEventListener("click", (e) => {
     var rect = canvas.getBoundingClientRect();
-    var col = Math.floor((e.clientX-rect.left-5.2)/32.5625);
-    var line = Math.floor((e.clientY-rect.top-5.2)/32.5625);
-    placeOnCanvas(col,line);
+    var col = Math.trunc((e.clientX-rect.left-5.5)/32);
+    var line = Math.trunc((e.clientY-rect.top-5.5)/32);
+    
+    if(placing==true){
+        if(map[line][col]==0){
+            map[line][col]=0.5;
+            ctx.fillStyle = "#3ad33a";
+            ctx.fillRect(col*32,line*32,32,32);
+        }
+        else if(map[line][col]==0.5){
+            map[line][col]=0;
+            ctx.clearRect(col*32,line*32,32,32);
+        }
+    }
 });
 
-function placeOnCanvas(col,line){
-    if(map[line][col] == 0){
-        ctx.drawImage(testImg,col*32.5625,line*32.5625,32,32);
-        map[line][col] = 1;
-    }else{
-        alert("Not empty !");
-    }
-    
-}
 
+//-------------------- Show/hide grid --------------------
 
-//-------------------- Provisional FN to show grid --------------------
-
-function showGrid(){
-    if(canvas.style.background!=='url("src/media/grid.png")'){
+function grid(state){
+    if(state==true){
         canvas.style.background = "url(src/media/grid.png)";
     }else{
         canvas.style.background = "url(src/media/background.png)";
@@ -70,7 +72,7 @@ function showGrid(){
 }
 
 
-//-------------------- Show build menu --------------------
+//-------------------- Show/hide build menu --------------------
 
 function showBuildMenu(){
     if(buildMenu.style.display == "none"){
@@ -78,4 +80,47 @@ function showBuildMenu(){
     }else{
         buildMenu.style.display = "none";
     }
+}
+
+
+//-------------------- Preview for placing multiple 'module' --------------------
+
+function multiPlacing(module){
+    grid(true);
+    placing = true;
+    moduleType = module;
+    buildMenu.style.display = "none";
+    yesNoBtn.style.display = "block";
+}
+
+
+//-------------------- Accept/Undo placing of multiple 'module' --------------------
+
+function placeModule(){
+    for(var i=0;i<16;i++){
+        for(var j=0;j<16;j++){
+            if(map[i][j]==0.5){
+                map[i][j]=1;
+                ctx.clearRect(j*32,i*32,32,32);
+                ctx.drawImage(starterImg,j*32,i*32,32,32);
+            }
+        }
+    }
+    grid(false);
+    placing = false;
+    yesNoBtn.style.display = "none";
+}
+
+function undoPlacing(){
+    for(var i=0;i<16;i++){
+        for(var j=0;j<16;j++){
+            if(map[i][j]==0.5){
+                map[i][j]=0;
+                ctx.clearRect(j*32,i*32,32,32);
+            }
+        }
+    }
+    grid(false);
+    placing = false;
+    yesNoBtn.style.display = "none";
 }

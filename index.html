@@ -10,21 +10,26 @@
     <body>
         <div class="app">
             <div class="base">
-                <canvas id="canvas" height="521" width="521"></canvas>
-                <button class="grid" onclick="showGrid()">GRID</button>
+                <canvas id="canvas" height="512" width="512"></canvas>
+            </div>
+            
+            <div class="ui_group_creation">
+                <button class="ui_btn_build" onclick="showBuildMenu()"><img src="src/media/ui_b_build.png" alt="Build Icon"></button>
+            </div>
+            
+            <div class="ui_btn_yesno" style="display: none;">
+                <button class="ui_btn_yes" onclick="placeModule()">YES</button>
+                <button class="ui_btn_no" onclick="undoPlacing()">NO</button>
             </div>
             
             <div class="overlay_build" style="display: none;">
-                <button class="starter_s">
+                <button id="starter" onclick="multiPlacing('starter')">
+                    <img src="src/media/starter.png" alt="Starter Icon">
                     Starter $1000
                 </button>
             </div>
-            
-            <div class="ui_s_creation">
-                <button class="ui_b_build" onclick="showBuildMenu()"><img src="src/media/ui_b_build.png" alt="Build Icon"></button>
-            </div>
         </div>
-        
+
         <script src="src/lib/main.js"></script>
     </body>
 </html>
