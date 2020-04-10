@@ -8,6 +8,9 @@ var testImg;
 //Cancel selection
 document.onselectstart = (e) => {e.preventDefault();}; 
 
+//DOM :
+var buildMenu = document.querySelector('.overlay_build');
+
 
 //-------------------- Load and draw image --------------------
 
@@ -63,5 +66,16 @@ function showGrid(){
         canvas.style.background = "url(src/media/grid.png)";
     }else{
         canvas.style.background = "url(src/media/background.png)";
+    }
+}
+
+
+//-------------------- Show build menu --------------------
+
+function showBuildMenu(){
+    if(buildMenu.style.display == "none"){
+        buildMenu.style.display = "flex";
+    }else{
+        buildMenu.style.display = "none";
     }
 }

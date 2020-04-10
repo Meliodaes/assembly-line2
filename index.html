@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="src/lib/style.css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=VT323&display=swap" rel="stylesheet">
     </head>
     <body>
         <div class="app">
@@ -14,8 +14,14 @@
                 <button class="grid" onclick="showGrid()">GRID</button>
             </div>
             
+            <div class="overlay_build" style="display: none;">
+                <button class="starter_s">
+                    Starter $1000
+                </button>
+            </div>
+            
             <div class="ui_s_creation">
-                <button class="ui_b_build"><img src="src/media/ui_b_build.png" alt="Build Icon"></button>
+                <button class="ui_b_build" onclick="showBuildMenu()"><img src="src/media/ui_b_build.png" alt="Build Icon"></button>
             </div>
         </div>
         
