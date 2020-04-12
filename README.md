@@ -8,15 +8,15 @@ Ability to place module (Starter) on map !
 ### RoadMap :
 ##### April :
 - [x] HTML / JS base (100%)
-- [ ] 'Overlaying' (15%)
+- [x] Remove structures (100%)
 - [x] Add "Starter" (100%)
-- [ ] Add ressources tiles
 - [ ] Move structures (and rotate)
-- [ ] Remove structures
+- [ ] 'Overlaying' (15%)
+- [ ] Add ressources tiles
 
 ##### May :
 - [ ] Some blueprints !
-- [ ] Time gesture
+- [ ] Time management
 
 ### Author :
 @SwnCake :)

@@ -14,17 +14,18 @@
             </div>
             
             <div class="ui_group_creation">
-                <button class="ui_btn_build" onclick="showBuildMenu()"><img src="src/media/ui_b_build.png" alt="Build Icon"></button>
+                <button class="ui_btn_build" onclick="showBuildMenu()"><img src="src/media/btn/ui_b_build.png" alt="Build Icon"></button>
+                <button class="ui_btn_remove" onclick="multiRemove()"><img src="src/media/btn/ui_b_remove.png" alt="Remove Icon"></button>
             </div>
             
             <div class="ui_btn_yesno" style="display: none;">
-                <button class="ui_btn_yes" onclick="placeModule()">YES</button>
-                <button class="ui_btn_no" onclick="undoPlacing()">NO</button>
+                <button class="ui_btn_yes" onclick="accept()">YES</button>
+                <button class="ui_btn_no" onclick="cancel()">NO</button>
             </div>
             
             <div class="overlay_build" style="display: none;">
-                <button id="starter" onclick="multiPlacing('starter')">
-                    <img src="src/media/starter.png" alt="Starter Icon">
+                <button id="starter" onclick="multiPlacing()">
+                    <img src="src/media/module/starter.png" alt="Starter Icon">
                     Starter $1000
                 </button>
             </div>

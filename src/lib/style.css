@@ -22,7 +22,7 @@ body {
 }
 
 canvas {
-    border: 5px solid black; background: url(../media/background.png);
+    border: 5px solid black; background: url(../media/canvas/background.png);
 }
 
 
@@ -31,30 +31,29 @@ canvas {
 .ui_group_creation {
     height: 50px; width: 400px; bottom: 10px;
     background: #00a3e8; border: 1px solid #0072a4;
-    border-radius: 10px; position: absolute;
+    border-radius: 10px; position: absolute; display: inline-flex;
 }
 
-.ui_btn_build {
+.ui_group_creation button {
     height: 50px; width: 50px;
-    border-radius: 10px 0 0 10px;
-    background: none; border: none;
-    cursor: pointer; display: flex;
+    background: none; display: flex;
+    outline: none; cursor: pointer;
     justify-content: center; align-items: center;
-    border-right: 2px solid #0072a4; outline: none;
+    
 }
 
-.ui_btn_build img:active {height: 25px; width: 25px;}
-.ui_btn_build img {height: 30px; width: 30px;}
+.ui_btn_build {border: none; border-radius: 10px 0 0 10px; border-right: 2px solid #0072a4;}
+.ui_btn_remove {border: none; border-right: 2px solid #0072a4;}
+
+.ui_group_creation img:active {height: 25px; width: 25px;}
+.ui_group_creation img {height: 30px; width: 30px;}
 
 
 /*---------- Btn Yes/No ----------*/
 
-.ui_btn_yesno {height: 50px; position: absolute; bottom: 75px;}
-.ui_btn_yesno button:active {font-size: 18px;}
-
 .ui_btn_yes {
     height: 50px; width: 50px;
-    background: #73BFB8; outline: 0;
+    background: #58a74d; outline: 0;
     border: 2px solid #478882; border-radius: 10px;
     font-family: 'VT323', monospace; font-size: 21px;
 }
@@ -65,6 +64,9 @@ canvas {
     border: 2px solid #981616; border-radius: 10px;
     font-family: 'VT323', monospace; font-size: 21px;
 }
+
+.ui_btn_yesno {height: 50px; position: absolute; bottom: 75px;}
+.ui_btn_yesno button:active {font-size: 18px;}
 
 
 /*-------------------- Overlay --------------------*/
