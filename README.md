@@ -1,6 +1,6 @@
 # Assembly Line²
 Assembly Line² is an unofficial port of the mobile game Assembly Line (made with heart and HTML).  
-This port keeps orignal "mind" of the game, with some adjustments and new things.
+This port keeps orignal "mind" of the game, with some adjustments and new things.  
 **Assembly Line only work with local files currently ! _(keep in mind that it's a WIP)_**
 
 ### Actual State :
