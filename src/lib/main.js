@@ -8,10 +8,14 @@ var saveMap = new Array();
 //DOM :
 const buildMenu = document.querySelector('.overlay_build');
 const yesNoBtn = document.querySelector('.ui_btn_yesno');
+const creationBar = document.querySelector('.ui_group_creation');
 
 //Canvas :
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const saveCanvas = document.createElement('canvas');
+const saveCtx = saveCanvas.getContext('2d');
+saveCanvas.height = 512; saveCanvas.width = 512;
 
 //Cancel selection
 document.onselectstart = (e) => {e.preventDefault();}; 
@@ -40,7 +44,22 @@ for(var i=0;i<16;i++){
     for(var j=0;j<16;j++){
         map[i][j] = 0;
         saveMap[i][j] = 0;
-        
+    }
+}
+
+
+//-------------------- Manage opacity of button (creation bar) after clicking --------------------
+
+function creationBarOpacity(actBtn, state){
+    for(var i=0;i<creationBar.children.length;i++){
+        var child = creationBar.children[i];
+        if(child!==document.querySelector(".ui_btn_"+actBtn)){
+            if(state == true){
+                child.style.opacity = "0.5";
+            }else{
+                child.style.opacity = "";
+            }
+        }
     }
 }
 
@@ -49,10 +68,10 @@ for(var i=0;i<16;i++){
 
 canvas.addEventListener("click", (e) => {
     var rect = canvas.getBoundingClientRect();
-    var col = Math.trunc((e.clientX-rect.left-5.5)/32);
-    var line = Math.trunc((e.clientY-rect.top-5.5)/32);
+    var col = Math.trunc((e.clientX-rect.left)/32);
+    var line = Math.trunc((e.clientY-rect.top)/32);
     
-    if(modifType=="placing"){
+    if(modifType=="build"){
         if(map[line][col]==0){
             map[line][col]=0.5;
             ctx.fillStyle = "#3ad33a";
@@ -64,7 +83,7 @@ canvas.addEventListener("click", (e) => {
         }
     }
     
-    else if(modifType=="removing"){
+    else if(modifType=="remove"){
         if(map[line][col]!==0 && map[line][col]!==0.5){
             map[line][col]=0.5;
             ctx.fillStyle = "#901818";
@@ -73,10 +92,59 @@ canvas.addEventListener("click", (e) => {
         else if(map[line][col]==0.5){
             map[line][col] = saveMap[line][col];
             ctx.clearRect(col*32,line*32,32,32);
-            ctx.drawImage(newCanvas,col*32,line*32,32,32,col*32,line*32,32,32);
+            ctx.drawImage(saveCanvas,col*32,line*32,32,32,col*32,line*32,32,32);
         }
     }
 });
+
+
+//-------------------- Accept/Undo modification --------------------
+
+function accept(){
+    for(var i=0;i<16;i++){
+        for(var j=0;j<16;j++){
+            if(map[i][j]==0.5){
+                if(modifType == "build"){
+                    map[i][j]=1;
+                    saveMap[i][j]=1;
+                    ctx.clearRect(j*32,i*32,32,32);
+                    ctx.drawImage(starterImg,j*32,i*32,32,32);
+                }
+                else if(modifType == "remove"){
+                    map[i][j]=0;
+                    saveMap[i][j]=0;
+                    ctx.clearRect(j*32,i*32,32,32);
+                }
+            }
+        }
+    }
+    grid(false);
+    modifType = "";
+    yesNoBtn.style.display = "none";
+    creationBarOpacity(modifType, false);
+}
+
+function cancel(){
+    for(var i=0;i<16;i++){
+        for(var j=0;j<16;j++){
+            if(map[i][j]==0.5){
+                if(modifType == "build"){
+                    map[i][j]=0;
+                    ctx.clearRect(j*32,i*32,32,32);
+                }
+                else if(modifType == "remove"){
+                    map[i][j] = saveMap[i][j];
+                    ctx.clearRect(j*32,i*32,32,32);
+                    ctx.drawImage(saveCanvas,j*32,i*32,32,32,j*32,i*32,32,32);
+                }
+            }
+        }
+    }
+    grid(false);
+    modifType = "";
+    yesNoBtn.style.display = "none";
+    creationBarOpacity(modifType, false);
+}
 
 
 //-------------------- Show/hide grid --------------------
@@ -95,78 +163,30 @@ function grid(state){
 function showBuildMenu(){
     if(buildMenu.style.display == "none"){
         buildMenu.style.display = "flex";
+        creationBarOpacity("build", true);
     }else{
         buildMenu.style.display = "none";
+        creationBarOpacity("build", false);
     }
 }
 
 
 //-------------------- Preview for placing/remove multiple 'module' --------------------
 
-const newCanvas = document.createElement('canvas');
-const newCtx = newCanvas.getContext('2d');
-newCanvas.height = 512; newCanvas.width = 512;
-
 function multiPlacing(){
     grid(true);
-    modifType = "placing";
+    modifType = "build";
     buildMenu.style.display = "none";
     yesNoBtn.style.display = "block";
 }
 
 function multiRemove(){
     grid(true);
-    modifType = "removing";
+    modifType = "remove";
     yesNoBtn.style.display = "block";
-    newCtx.clearRect(0,0,512,512);
-    newCtx.drawImage(canvas,0,0);
-}
-
-
-//-------------------- Accept/Undo modification --------------------
-
-function accept(){
-    for(var i=0;i<16;i++){
-        for(var j=0;j<16;j++){
-            if(map[i][j]==0.5){
-                if(modifType == "placing"){
-                    map[i][j]=1;
-                    saveMap[i][j]=1;
-                    ctx.clearRect(j*32,i*32,32,32);
-                    ctx.drawImage(starterImg,j*32,i*32,32,32);
-                }
-                else if(modifType == "removing"){
-                    map[i][j]=0;
-                    saveMap[i][j]=0;
-                    ctx.clearRect(j*32,i*32,32,32);
-                }
-            }
-        }
-    }
-    grid(false);
-    modifType = "";
-    yesNoBtn.style.display = "none";
-}
-
-function cancel(){
-    for(var i=0;i<16;i++){
-        for(var j=0;j<16;j++){
-            if(map[i][j]==0.5){
-                if(modifType == "placing"){
-                    map[i][j]=0;
-                    ctx.clearRect(j*32,i*32,32,32);
-                }
-                else if(modifType == "removing"){
-                    map[i][j] = saveMap[i][j];
-                    ctx.clearRect(j*32,i*32,32,32);
-                    ctx.drawImage(newCanvas,j*32,i*32,32,32,j*32,i*32,32,32);
-                }
-            }
-        }
-    }
-    grid(false);
-    modifType = "";
-    yesNoBtn.style.display = "none";
+    creationBarOpacity("remove", true);
+    saveCtx.clearRect(0,0,512,512);
+    saveCtx.drawImage(canvas,0,0);
 }
 
 

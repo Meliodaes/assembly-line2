@@ -22,31 +22,42 @@ body {
 }
 
 canvas {
-    border: 5px solid black; background: url(../media/canvas/background.png);
+    outline: 5px solid black; background: url(../media/canvas/background.png);
 }
 
 
 /*-------------------- UI --------------------*/
 
+/* Creation : */
+
 .ui_group_creation {
     height: 50px; width: 400px; bottom: 10px;
-    background: #00a3e8; border: 1px solid #0072a4;
-    border-radius: 10px; position: absolute; display: inline-flex;
+    border-radius: 10px; position: absolute; 
+    border: 1px solid #0072a4; display: inline-flex;
 }
 
 .ui_group_creation button {
-    height: 50px; width: 50px;
-    background: none; display: flex;
-    outline: none; cursor: pointer;
+    height: 50px; width: 50px; background: #00a3e8;
+    display: flex; outline: none; cursor: pointer;
     justify-content: center; align-items: center;
-    
+    border: none; border-right: 2px solid #0072a4;
 }
 
-.ui_btn_build {border: none; border-radius: 10px 0 0 10px; border-right: 2px solid #0072a4;}
-.ui_btn_remove {border: none; border-right: 2px solid #0072a4;}
+.prov {width: calc(100% - 200px);background: #00a3e8; border-radius: 0 10px 10px 0;} /* Provisional ! */
 
-.ui_group_creation img:active {height: 25px; width: 25px;}
-.ui_group_creation img {height: 30px; width: 30px;}
+.ui_btn_build {border-radius: 10px 0 0 10px;}
+.ui_group_creation button:active img {height: 25px; width: 25px;}
+.ui_group_creation img {height: 30px; width: 30px; filter: drop-shadow(2px 4px 2px rgba(0,0,0,0.3))}
+
+
+/* Stats : */
+
+.ui_group_stats {
+    height: 75px; width: 200px; top: 10px;
+    border-radius: 10px; position: absolute; 
+    border: 1px solid #0072a4; display: inline-flex;
+    background: #00a3e8;
+}
 
 
 /*---------- Btn Yes/No ----------*/
@@ -70,6 +81,8 @@ canvas {
 
 
 /*-------------------- Overlay --------------------*/
+
+/* Build : */
 
 .overlay_build {
     height: 600px; width: 400px;
