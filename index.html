@@ -10,30 +10,42 @@
     <body>
         <div class="app">
             <div class="base">
-                <canvas id="canvas" height="512" width="512"></canvas>
+                <canvas id="canvas" height="512" width="512">Your browser doesn't support Canvas API ! Please update it...</canvas>
             </div>
             
-            <div class="ui_group_stats">
+            <div class="ui_stats">
                 <div class="status"></div>
-                <div class="overall_money"></div>
+                <div class="overall_money"><span>$</span>999K</div>
                 <div class="money_sec"></div>
             </div>
-            <div class="ui_group_creation">
-                <button class="ui_btn_build" onclick="showBuildMenu()"><img src="src/media/btn/ui_b_build.png" alt="Build Icon"></button>
-                <button class="ui_btn_remove" onclick="multiRemove()"><img src="src/media/btn/ui_b_remove.png" alt="Remove Icon"></button>
-                <button class="ui_btn_move" onclick=""><img src="src/media/btn/ui_b_move.png" alt="Move Icon"></button>
-                <button class="ui_btn_upgrade" onclick=""><img src="src/media/btn/ui_b_upgrade.png" alt="Upgrade Icon"></button>
+            <div class="ui_creationBar">
+                <button class="btn_build" onclick="showMenu('build', true)"><img src="src/media/btn/build.png" alt="Build Icon"></button>
+                <button class="btn_remove" onclick="modifPreview('remove')"><img src="src/media/btn/remove.png" alt="Remove Icon"></button>
+                <button class="btn_move" onclick="modifPreview('move')"><img src="src/media/btn/move.png" alt="Move Icon"></button>
+                <button class="btn_turn" onclick="modifPreview('turn')"><img src="src/media/btn/turn.png" alt="Turn Icon"></button>
+                <button class="btn_upgrade" onclick=""><img src="src/media/btn/upgrade.png" alt="Upgrade Icon"></button>
                 <div class="prov"></div>
             </div>
             <div class="ui_btn_yesno" style="display: none;">
-                <button class="ui_btn_yes" onclick="accept()">YES</button>
-                <button class="ui_btn_no" onclick="cancel()">NO</button>
+                <button class="btn_yes" onclick="accept()">YES</button>
+                <button class="btn_no" onclick="cancel()">NO</button>
             </div>
             
             <div class="overlay_build" style="display: none;">
-                <button id="starter" onclick="multiPlacing()">
-                    <img src="src/media/module/starter.png" alt="Starter Icon">
-                    Starter $1000
+                <button id="starter" onclick="modifPreview('build',1)">
+                    <span><img src="src/media/module/starter.png" alt="Starter Icon"></span>
+                    <span>Starter</span>
+                    <span>$1000</span>
+                </button>
+                <button id="seller" onclick="modifPreview('build',2)">
+                    <span><img src="src/media/module/seller.png" alt="Seller Icon"></span>
+                    <span>Seller</span>
+                    <span>$5000</span>
+                </button>
+                <button id="roller" onclick="modifPreview('build',3)">
+                    <span><img src="src/media/module/roller.png" alt="Roller Icon"></span>
+                    <span>Roller</span>
+                    <span>$300</span>
                 </button>
             </div>
         </div>

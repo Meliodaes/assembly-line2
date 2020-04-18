@@ -1,21 +1,18 @@
 //-------------------- Init --------------------
 
 //Global Var :
-var starterImg, modifType;
-var map = new Array();
-var saveMap = new Array();
+var moduleTiles, moduleId, modifType;
+var map = new Array(), turnMap = new Array(), tempArray = new Array();
 
 //DOM :
 const buildMenu = document.querySelector('.overlay_build');
 const yesNoBtn = document.querySelector('.ui_btn_yesno');
-const creationBar = document.querySelector('.ui_group_creation');
+const noBtn = document.querySelector('.btn_no');
+const creationBar = document.querySelector('.ui_creationBar');
 
 //Canvas :
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const saveCanvas = document.createElement('canvas');
-const saveCtx = saveCanvas.getContext('2d');
-saveCanvas.height = 512; saveCanvas.width = 512;
 
 //Cancel selection
 document.onselectstart = (e) => {e.preventDefault();}; 
@@ -33,117 +30,191 @@ function loadImg(url){
     });
 }
 
-loadImg('src/media/module/starter.png').then(img => starterImg=img);
+loadImg('src/media/module/module.png').then(img => moduleTiles=img);
 
 
-//-------------------- Canvas mapping --------------------
+//-------------------- Manage 'creation bar' after clicking on a button --------------------
 
-for(var i=0;i<16;i++){
-    map[i] = new Array(16);
-    saveMap[i] = new Array(16);
-    for(var j=0;j<16;j++){
-        map[i][j] = 0;
-        saveMap[i][j] = 0;
-    }
-}
-
-
-//-------------------- Manage opacity of button (creation bar) after clicking --------------------
-
-function creationBarOpacity(actBtn, state){
+function creationBarManagement(actBtn, state){
     for(var i=0;i<creationBar.children.length;i++){
         var child = creationBar.children[i];
-        if(child!==document.querySelector(".ui_btn_"+actBtn)){
-            if(state == true){
-                child.style.opacity = "0.5";
-            }else{
-                child.style.opacity = "";
-            }
+        if(child!==document.querySelector(".btn_"+actBtn) && state==true){
+            child.style.opacity = "0.5";
+            child.disabled = true;
+        }
+        else if(child!==document.querySelector(".ui_btn_"+actBtn) && state==false){
+            child.style.opacity = "";
+            child.disabled = false;
         }
     }
 }
 
 
-//-------------------- Click event on canvas --------------------
+//-------------------- Manage module --------------------
 
+function drawModule(id, x, y){
+    switch(id){
+        case 1: ctx.drawImage(moduleTiles,0,0,32,32,x,y,32,32); break;
+        case 2: ctx.drawImage(moduleTiles,32,0,32,32,x,y,32,32); break;
+        case 3: ctx.drawImage(moduleTiles,64,0,32,32,x,y,32,32); break;
+        case "arrow": ctx.drawImage(moduleTiles,96,0,32,32,x,y,32,32); break;
+        default: return false; break;
+    }
+}
+
+function rotateModule(col,line,opt){
+    ctx.clearRect(col*32,line*32,32,32);
+    ctx.save();
+    ctx.translate((col*32)+16,(line*32)+16);
+    ctx.rotate((turnMap[line][col]*90)*(Math.PI/180));
+    ctx.translate(-(col*32)-16,-(line*32)-16);
+    drawModule(map[line][col],col*32,line*32);
+    drawModule(opt,col*32,line*32);
+    ctx.restore();
+}
+
+
+//-------------------- Canvas management (event, etc) --------------------
+
+//Canvas mapping :
+for(var i=0;i<16;i++){
+    map[i] = new Array();
+    turnMap[i] = new Array();
+    for(var j=0;j<16;j++){
+        map[i][j] = 0;
+        turnMap[i][j] = 0;
+    }
+}
+
+//Click event :
 canvas.addEventListener("click", (e) => {
     var rect = canvas.getBoundingClientRect();
     var col = Math.trunc((e.clientX-rect.left)/32);
     var line = Math.trunc((e.clientY-rect.top)/32);
+    var index = tempArray.indexOf("map["+line+"]["+col+"]");
     
     if(modifType=="build"){
-        if(map[line][col]==0){
-            map[line][col]=0.5;
+        if(map[line][col]==0 && index <= -1){
+            tempArray.push("map["+line+"]["+col+"]");
             ctx.fillStyle = "#3ad33a";
             ctx.fillRect(col*32,line*32,32,32);
         }
-        else if(map[line][col]==0.5){
+        else if(index > -1){
             map[line][col]=0;
+            tempArray.splice(index,1);
             ctx.clearRect(col*32,line*32,32,32);
         }
     }
-    
     else if(modifType=="remove"){
-        if(map[line][col]!==0 && map[line][col]!==0.5){
-            map[line][col]=0.5;
+        if(index <= -1 && map[line][col]!==0){
+            tempArray.push("map["+line+"]["+col+"]");
             ctx.fillStyle = "#901818";
             ctx.fillRect(col*32,line*32,32,32);
         }
-        else if(map[line][col]==0.5){
-            map[line][col] = saveMap[line][col];
+        else if(index > -1 && map[line][col]!==0){
             ctx.clearRect(col*32,line*32,32,32);
-            ctx.drawImage(saveCanvas,col*32,line*32,32,32,col*32,line*32,32,32);
+            drawModule(map[line][col],col*32,line*32);
+            rotateModule(col,line,"");
+            tempArray.splice(index,1);
+        }
+    }
+    else if(modifType=="move"){
+        if(map[line][col]!==0 && tempArray.length==0){
+            tempArray.push("map["+line+"]["+col+"]");
+            ctx.fillStyle = "#3ad33a";
+            ctx.fillRect(col*32,line*32,32,32);
+        }
+        else if(map[line][col]!==0 && tempArray.length > 0 && "map["+line+"]["+col+"]"==tempArray[0]){
+            ctx.clearRect(col*32,line*32,32,32);
+            drawModule(map[line][col],col*32,line*32);
+            rotateModule(col,line,"");
+            tempArray.splice(index,1);
+        }
+        else if(map[line][col]==0 && tempArray.length > 0){
+            var coord = (tempArray[0].match(/\d+/g).map(Number) + "").split(",");
+            map[line][col] = eval(tempArray[0]);
+            turnMap[line][col] = turnMap[coord[0]][coord[1]];
+            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+            drawModule(map[line][col],col*32,line*32);
+            rotateModule(col,line,"");
+            map[coord[0]][coord[1]] = 0;
+            turnMap[coord[0]][coord[1]] = 0;
+            tempArray.splice(index,1);
+        }
+    }
+    else if(modifType=="turn"){
+        if(map[line][col]!==0){
+            turnMap[line][col] = (turnMap[line][col]+1)%4
+            rotateModule(col,line,"arrow");
         }
     }
 });
 
 
-//-------------------- Accept/Undo modification --------------------
+//-------------------- Accept/Cancel modification --------------------
 
 function accept(){
     for(var i=0;i<16;i++){
         for(var j=0;j<16;j++){
-            if(map[i][j]==0.5){
-                if(modifType == "build"){
-                    map[i][j]=1;
-                    saveMap[i][j]=1;
-                    ctx.clearRect(j*32,i*32,32,32);
-                    ctx.drawImage(starterImg,j*32,i*32,32,32);
+            if(modifType == "build" && tempArray.length > 0 && tempArray.indexOf("map["+j+"]["+i+"]") <= -1){
+                for(var o=0;o<tempArray.length;o++){
+                    var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
+                    map[coord[0]][coord[1]] = moduleId;
+                    ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+                    drawModule(moduleId,coord[1]*32,coord[0]*32);
                 }
-                else if(modifType == "remove"){
-                    map[i][j]=0;
-                    saveMap[i][j]=0;
-                    ctx.clearRect(j*32,i*32,32,32);
+            }
+            else if(modifType == "remove" && tempArray.length > 0 && tempArray.indexOf("map["+j+"]["+i+"]") <= -1){
+                for(var o=0;o<tempArray.length;o++){
+                    var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
+                    map[coord[0]][coord[1]] = 0;
+                    turnMap[coord[0]][coord[1]] = 0;
+                    ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+                }
+            }
+            else if(modifType == "move" && tempArray.length!==0){
+                var coord = (tempArray[0].match(/\d+/g).map(Number) + "").split(",");
+                ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+                drawModule(map[coord[0]][coord[1]],coord[1]*32,coord[0]*32);
+                rotateModule(coord[1],coord[0],"");
+            }
+            else if(modifType == "turn"){
+                for(var o=0;o<tempArray.length;o++){
+                    var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
+                    rotateModule(coord[1],coord[0],"");
                 }
             }
         }
     }
     grid(false);
     modifType = "";
+    tempArray = [];
     yesNoBtn.style.display = "none";
-    creationBarOpacity(modifType, false);
+    noBtn.style.display = "inline-block";
+    creationBarManagement(modifType, false);
 }
 
 function cancel(){
-    for(var i=0;i<16;i++){
-        for(var j=0;j<16;j++){
-            if(map[i][j]==0.5){
-                if(modifType == "build"){
-                    map[i][j]=0;
-                    ctx.clearRect(j*32,i*32,32,32);
-                }
-                else if(modifType == "remove"){
-                    map[i][j] = saveMap[i][j];
-                    ctx.clearRect(j*32,i*32,32,32);
-                    ctx.drawImage(saveCanvas,j*32,i*32,32,32,j*32,i*32,32,32);
-                }
-            }
+    if(modifType == "build" && tempArray.length > 0){
+        for(var o=0;o<tempArray.length;o++){
+            var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
+            map[coord[0]][coord[1]]=0;
+            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+        }
+    }
+    else if(modifType == "remove" && tempArray.length > 0){
+        for(var o=0;o<tempArray.length;o++){
+            var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
+            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+            drawModule(map[coord[0]][coord[1]],coord[1]*32,coord[0]*32);
+            rotateModule(coord[1],coord[0],"");
         }
     }
     grid(false);
     modifType = "";
+    tempArray = [];
     yesNoBtn.style.display = "none";
-    creationBarOpacity(modifType, false);
+    creationBarManagement(modifType, false);
 }
 
 
@@ -158,43 +229,60 @@ function grid(state){
 }
 
 
-//-------------------- Show/hide build menu --------------------
+//-------------------- Show/hide menu --------------------
 
-function showBuildMenu(){
-    if(buildMenu.style.display == "none"){
-        buildMenu.style.display = "flex";
-        creationBarOpacity("build", true);
-    }else{
-        buildMenu.style.display = "none";
-        creationBarOpacity("build", false);
+function showMenu(type, state){
+    if(type=="build"){
+        if(state==true){
+            buildMenu.style.display = "flex";
+            creationBarManagement("build", true);
+        }else{
+            buildMenu.style.display = "none";
+            creationBarManagement("build", false);
+        }
     }
 }
 
 
-//-------------------- Preview for placing/remove multiple 'module' --------------------
+//-------------------- Preview for modification --------------------
 
-function multiPlacing(){
-    grid(true);
-    modifType = "build";
-    buildMenu.style.display = "none";
+function modifPreview(type, id=0){
+    if(type == "build" && id!==0){
+        buildMenu.style.display = "none";
+        moduleId = id;
+    }
+    else if(type == "remove"){
+        creationBarManagement("remove", true);
+    }
+    else if(type == "move"){
+        noBtn.style.display = "none";
+        creationBarManagement("move", true);
+    }
+    else if(type == "turn"){
+        noBtn.style.display = "none";
+        creationBarManagement("turn", true);
+        for(var i=0;i<16;i++){
+            for(var j=0;j<16;j++){
+                if(map[i][j]!==0){
+                    tempArray.push("map["+i+"]["+j+"]");
+                    drawModule("arrow",j*32,i*32);
+                    rotateModule(j,i,"arrow");
+                }
+            }
+        }
+    }
+    
     yesNoBtn.style.display = "block";
-}
-
-function multiRemove(){
+    modifType = type;
     grid(true);
-    modifType = "remove";
-    yesNoBtn.style.display = "block";
-    creationBarOpacity("remove", true);
-    saveCtx.clearRect(0,0,512,512);
-    saveCtx.drawImage(canvas,0,0);
 }
 
 
 //-------------------- Debug --------------------
 
 document.addEventListener("keydown",(e)=>{
-   if(e.keyCode == 96){
-       console.log(map);
-       console.log(saveMap);
-   }
+    if(e.keyCode == 96){
+//        console.log(tempArray);
+        console.log(map);
+    }
 });
