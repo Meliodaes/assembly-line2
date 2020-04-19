@@ -91,6 +91,16 @@ canvas {
 .ui_btn_yesno button:active {font-size: 20px;}
 
 
+/* Money spend/win before accept : */
+
+.ui_moneyspend {
+    height: 50px; width: 100px; position: absolute; 
+    bottom: 75px; left: calc(50% - 200px); background: #00a3e8;
+    border: 2px solid #0072a4; border-radius: 8px;
+    justify-content: center; align-items: center; font-size: 24px;
+}
+
+
 /*-------------------- Overlay --------------------*/
 
 /* Build : */
