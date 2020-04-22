@@ -8,15 +8,18 @@
         <link href="https://fonts.googleapis.com/css?family=VT323&display=swap" rel="stylesheet">
     </head>
     <body>
+        <div class="loading">
+            <span>Loading, please wait...</span>
+            <div class="progressbar"><div id="prog"></div></div>
+        </div>
+       
         <div class="app">
-            <div class="base">
-                <canvas id="canvas" height="512" width="512">Your browser doesn't support Canvas API ! Please update it...</canvas>
-            </div>
+            <canvas id="canvas" height="512" width="512">Your browser doesn't support Canvas API ! Please update it...</canvas>
             
             <div class="ui_stats">
                 <div class="status"></div>
                 <div class="overall_money"></div>
-                <div class="money_sec"></div>
+                <div class="money_sec">$0</div>
             </div>
             <div class="ui_creationBar">
                 <button class="btn_build" onclick="showMenu('build', true)"><img src="src/media/btn/build.png" alt="Build Icon"></button>
@@ -33,21 +36,51 @@
             <div class="ui_moneyspend" style="display: none;"></div>
             
             <div class="overlay_build" style="display: none;">
-                <button id="starter" onclick="modifPreview('build',1)">
-                    <span><img src="src/media/module/starter.png" alt="Starter Icon"></span>
-                    <span>Starter</span>
-                    <span>$1000</span>
-                </button>
-                <button id="seller" onclick="modifPreview('build',2)">
-                    <span><img src="src/media/module/seller.png" alt="Seller Icon"></span>
-                    <span>Seller</span>
-                    <span>$5000</span>
-                </button>
-                <button id="roller" onclick="modifPreview('build',3)">
-                    <span><img src="src/media/module/roller.png" alt="Roller Icon"></span>
-                    <span>Roller</span>
-                    <span>$300</span>
-                </button>
+                <button class="close" onclick="showMenu('build', false)"><img src="src/media/btn/remove.png" alt="Close Icon"></button>
+                <div class="module_selection">
+                    <button class="button" onclick="modifPreview('build',1)">
+                        <span><img src="src/media/module/starter.png" alt="Starter Icon"></span>
+                        <span>Starter</span>
+                        <span>$1000</span>
+                    </button>
+                    <button class="button" onclick="modifPreview('build',2)">
+                        <span><img src="src/media/module/seller.png" alt="Seller Icon"></span>
+                        <span>Seller</span>
+                        <span>$5000</span>
+                    </button>
+                    <button class="button" onclick="modifPreview('build',3)">
+                        <span><img src="src/media/module/roller.png" alt="Roller Icon"></span>
+                        <span>Roller</span>
+                        <span>$300</span>
+                    </button>
+                    <button class="button" onclick="modifPreview('build',4)">
+                        <span><img src="src/media/module/furnace.png" alt="Furnace Icon"></span>
+                        <span>Furnace</span>
+                        <span>$10K</span>
+                    </button>
+                    <button class="button" onclick="modifPreview('build',5)">
+                        <span><img src="src/media/module/cutter.png" alt="Cutter Icon"></span>
+                        <span>Cutter</span>
+                        <span>$10K</span>
+                    </button>
+                    <button class="button" onclick="modifPreview('build',6)">
+                        <span><img src="src/media/module/wire_drawer.png" alt="Wire Drawer Icon"></span>
+                        <span>Wire Drawer</span>
+                        <span>$10K</span>
+                    </button>
+                    <button class="button" onclick="modifPreview('build',7)">
+                        <span><img src="src/media/module/crafter.png" alt="Crafter Icon"></span>
+                        <span>Crafter</span>
+                        <span>$20K</span>
+                    </button>
+<!--
+                    <button class="button" onclick="">
+                        <span><img src="src/media/module/crafter.png" alt="Crafter Icon"></span>
+                        <span>TEST</span>
+                        <span>$20K</span>
+                    </button>
+-->
+                </div>
             </div>
         </div>
 

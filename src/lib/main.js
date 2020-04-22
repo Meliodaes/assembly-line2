@@ -4,11 +4,12 @@
 import {loadImg} from './loaders.js';
 import {Money} from './classes.js';
 import {grid, showMenu, creationBarManagement} from './ui.js';
+import {init} from './init.js';
 
 //Global Var :
 var moduleTiles, moduleId, modifType;
-const money = new Money(6000,0);
 var map = new Array(), turnMap = new Array(), tempArray = new Array();
+const money = new Money(6000,0);
 
 //DOM :
 export const buildMenu = document.querySelector('.overlay_build');
@@ -24,6 +25,9 @@ export const ctx = canvas.getContext('2d');
 //Load module tile
 loadImg('src/media/module/module.png').then(img => moduleTiles=img);
 
+//Launch initialisation function (buffer, etc)
+init();
+//document.querySelector('.loading').style.display = "none"; //BYPASS
 
 //-------------------- Module Cost --------------------
 
@@ -32,6 +36,10 @@ function moduleCost(id){
         case 1: return 1000;
         case 2: return 5000;
         case 3: return 300;
+        case 4: return 10000;
+        case 5: return 10000;
+        case 6: return 10000;
+        case 7: return 20000;
     }
 }
 
@@ -43,7 +51,11 @@ function drawModule(id, x, y){
         case 1: ctx.drawImage(moduleTiles,0,0,32,32,x,y,32,32); break;
         case 2: ctx.drawImage(moduleTiles,32,0,32,32,x,y,32,32); break;
         case 3: ctx.drawImage(moduleTiles,64,0,32,32,x,y,32,32); break;
-        case "arrow": ctx.drawImage(moduleTiles,96,0,32,32,x,y,32,32); break;
+        case 4: ctx.drawImage(moduleTiles,96,0,32,32,x,y,32,32); break;
+        case 5: ctx.drawImage(moduleTiles,0,32,32,32,x,y,32,32); break;
+        case 6: ctx.drawImage(moduleTiles,32,32,32,32,x,y,32,32); break;
+        case 7: ctx.drawImage(moduleTiles,64,32,32,32,x,y,32,32); break;
+        case "arrow": ctx.drawImage(moduleTiles,96,32,32,32,x,y,32,32); break;
         default: return false; break;
     }
 }
@@ -55,7 +67,7 @@ function rotateModule(col,line,opt){
     ctx.rotate((turnMap[line][col]*90)*(Math.PI/180));
     ctx.translate(-(col*32)-16,-(line*32)-16);
     drawModule(map[line][col],col*32,line*32);
-    drawModule(opt,col*32,line*32);
+    if(opt=="arrow") drawModule(opt,col*32,line*32);
     ctx.restore();
 }
 
@@ -254,10 +266,11 @@ export function cancel(){
 
 //-------------------- Debug --------------------
 
-document.addEventListener("keydown",(e)=>{
-    if(e.keyCode == 96){
-    }
-});
+//document.addEventListener("keydown",(e)=>{
+//    if(e.keyCode == 96){
+//        progBarGoTo(50);
+//    }
+//});
 
 
 

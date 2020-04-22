@@ -1,4 +1,4 @@
-//-------------------- Mney --------------------
+//-------------------- Money --------------------
 
 export class Money {
     constructor(amount, tempMoney){
