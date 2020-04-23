@@ -1,13 +1,12 @@
 //-------------------- Init --------------------
 
 //Require :
-import {loadImg} from './loaders.js';
 import {Money} from './classes.js';
 import {grid, showMenu, creationBarManagement} from './ui.js';
-import {init} from './init.js';
+import {init, moduleTiles, buffer} from './init.js';
 
 //Global Var :
-var moduleTiles, moduleId, modifType;
+var moduleId, modifType;
 var map = new Array(), turnMap = new Array(), tempArray = new Array();
 const money = new Money(6000,0);
 
@@ -22,10 +21,7 @@ const uiSpendMoney = document.querySelector('.ui_moneyspend');
 export const canvas = document.getElementById('canvas');
 export const ctx = canvas.getContext('2d');
 
-//Load module tile
-loadImg('src/media/module/module.png').then(img => moduleTiles=img);
-
-//Launch initialisation function (buffer, etc)
+//Launch initialisation function (buffer, etc) :
 init();
 //document.querySelector('.loading').style.display = "none"; //BYPASS
 
@@ -48,14 +44,14 @@ function moduleCost(id){
 
 function drawModule(id, x, y){
     switch(id){
-        case 1: ctx.drawImage(moduleTiles,0,0,32,32,x,y,32,32); break;
-        case 2: ctx.drawImage(moduleTiles,32,0,32,32,x,y,32,32); break;
-        case 3: ctx.drawImage(moduleTiles,64,0,32,32,x,y,32,32); break;
-        case 4: ctx.drawImage(moduleTiles,96,0,32,32,x,y,32,32); break;
-        case 5: ctx.drawImage(moduleTiles,0,32,32,32,x,y,32,32); break;
-        case 6: ctx.drawImage(moduleTiles,32,32,32,32,x,y,32,32); break;
-        case 7: ctx.drawImage(moduleTiles,64,32,32,32,x,y,32,32); break;
-        case "arrow": ctx.drawImage(moduleTiles,96,32,32,32,x,y,32,32); break;
+        case 1: ctx.drawImage(buffer,0,0,32,32,x,y,32,32); break;
+        case 2: ctx.drawImage(buffer,32,0,32,32,x,y,32,32); break;
+        case 3: ctx.drawImage(buffer,64,0,32,32,x,y,32,32); break;
+        case 4: ctx.drawImage(buffer,96,0,32,32,x,y,32,32); break;
+        case 5: ctx.drawImage(buffer,0,32,32,32,x,y,32,32); break;
+        case 6: ctx.drawImage(buffer,32,32,32,32,x,y,32,32); break;
+        case 7: ctx.drawImage(buffer,64,32,32,32,x,y,32,32); break;
+        case "arrow": ctx.drawImage(buffer,96,32,32,32,x,y,32,32); break;
         default: return false; break;
     }
 }
