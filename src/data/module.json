@@ -1,0 +1,71 @@
+{
+    "1": {
+        "name": "starter",
+        "price": 1000,
+        "costPerCycle": 5,
+        "delay": 3,
+        "bufferPos": [0,0]
+    },
+    "2": {
+        "name": "seller",
+        "price": 5000,
+        "costPerCycle": 0,
+        "delay": 0,
+        "bufferPos": [1,0]
+    },
+    "3": {
+        "name": "roller",
+        "price": 300,
+        "costPerCycle": 0,
+        "delay": 0,
+        "bufferPos": [2,0]
+    },
+    "4": {
+        "name": "furnace",
+        "price": 10000,
+        "costPerCycle": 5,
+        "delay": 3,
+        "bufferPos": [3,0]
+    },
+    "5": {
+        "name": "cutter",
+        "price": 10000,
+        "costPerCycle": 5,
+        "delay": 3,
+        "bufferPos": [0,1]
+    },
+    "6": {
+        "name": "wire_drawer",
+        "price": 10000,
+        "costPerCycle": 5,
+        "delay": 3,
+        "bufferPos": [1,1]
+    },
+    "7": {
+        "name": "crafter",
+        "price": 20000,
+        "costPerCycle": 5,
+        "delay": 3,
+        "bufferPos": [2,1]
+    },
+    "arrow": {
+        "bufferPos": [3,1]
+    },
+    
+    
+    "aluminium": {
+        "bufferPos": [0,2]
+    },
+    "copper": {
+        "bufferPos": [1,2]
+    },
+    "diamond": {
+        "bufferPos": [2,2]
+    },
+    "gold": {
+        "bufferPos": [3,2]
+    },
+    "iron": {
+        "bufferPos": [4,2]
+    }
+}

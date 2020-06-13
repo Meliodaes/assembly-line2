@@ -20,10 +20,10 @@
             <div class="ui_stats">
                 <div class="status"></div>
                 <div class="overall_money"></div>
-                <div class="money_sec">$0</div>
+                <div class="money_sec"></div>
             </div>
             <div class="ui_creationBar">
-                <button class="btn_build" onclick="showMenu('build', true)"><img src="src/media/btn/build.png" alt="Build Icon"></button>
+                <button class="btn_build" onclick="showOverlay('build')"><img src="src/media/btn/build.png" alt="Build Icon"></button>
                 <button class="btn_remove" onclick="modifPreview('remove')"><img src="src/media/btn/remove.png" alt="Remove Icon"></button>
                 <button class="btn_move" onclick="modifPreview('move')"><img src="src/media/btn/move.png" alt="Move Icon"></button>
                 <button class="btn_turn" onclick="modifPreview('turn')"><img src="src/media/btn/turn.png" alt="Turn Icon"></button>
@@ -37,7 +37,7 @@
             <div class="ui_moneyspend" style="display: none;"></div>
             
             <div class="overlay_build" style="display: none;">
-                <button class="close" onclick="showMenu('build', false)"><img src="src/media/btn/remove.png" alt="Close Icon"></button>
+                <button class="close" onclick="showOverlay('build')"><img src="src/media/btn/remove.png" alt="Close Icon" style="height: 16px; width: 16px;"></button>
                 <div class="module_selection">
                     <button class="button" onclick="modifPreview('build',1)">
                         <span><img src="src/media/module/starter.png" alt="Starter Icon"></span>
@@ -75,17 +75,35 @@
                         <span>$20K</span>
                     </button>
 <!--
-                    <button class="button" onclick="">
-                        <span><img src="src/media/module/crafter.png" alt="Crafter Icon"></span>
+                    <button class="button" onclick="modifPreview('build','0')">
+                        <span><img src="src/media/module/crafter.png" alt="TEST"></span>
                         <span>TEST</span>
-                        <span>$20K</span>
+                        <span>TEST</span>
                     </button>
 -->
                 </div>
             </div>
+            <div class="overlay_starter" style="display: none;">
+                <button class="close" onclick="showOverlay('starter')"><img src="src/media/btn/remove.png" alt="Close Icon" style="height: 16px; width: 16px;"></button>
+                <div class="costPerCycle"></div>
+                <div class="delay"></div>
+                <div class="spawnObject">
+                    <button class="btn_spawnSelector" onclick="showOverlay('spawnSelector');"><img src="src/media/btn/remove.png" style="height: 31px; width: 31px;"></button>
+                    <span>Select</span>
+                </div>
+                <div class="spawnNumber"></div>
+            </div>
+            <div class="overlay_spawnSelector" style="display: none;">
+                <button class="close" onclick="showOverlay('spawnSelector')"><img src="src/media/btn/remove.png" alt="Close Icon" style="height: 16px; width: 16px;"></button>
+                <button class="spawnType" id="st_none"><img src="src/media/ressources/none.png" style="height: 40px; width: 40px;"></button>
+                <button class="spawnType" id="st_copper"><img src="src/media/ressources/copper.png" style="height: 40px; width: 40px;"></button>
+                <button class="spawnType" id="st_iron"><img src="src/media/ressources/iron.png" style="height: 40px; width: 40px;"></button>
+                <button class="spawnType" id="st_aluminium"><img src="src/media/ressources/aluminium.png" style="height: 40px; width: 40px;"></button>
+                <button class="spawnType" id="st_gold"><img src="src/media/ressources/gold.png" style="height: 40px; width: 40px;"></button>
+                <button class="spawnType" id="st_diamond"><img src="src/media/ressources/diamond.png" style="height: 40px; width: 40px;"></button>
+            </div>
         </div>
 
         <script type="module" src="src/lib/main.js"></script>
-        <script type="module" src="src/lib/event.js"></script>
     </body>
 </html>

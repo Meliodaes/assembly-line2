@@ -1,11 +1,11 @@
 body {
     height: 100vh; width: 100vw;
     margin: 0; padding: 0; display: flex;
-    background: #333; color: white;
+    background: #333; color: #FFF;
     font-family: 'VT323', monospace;
     justify-content: center; align-items: center;
 }
-
+body img {pointer-events: none;}
 
 /*-------------------- Base --------------------*/
 
@@ -16,9 +16,8 @@ body {
 }
 
 canvas {
-    outline: 5px solid black; background: url(../media/canvas/background.png);
+    outline: 5px solid #000; background: url(../media/canvas/background.png);
 }
-
 
 /*-------------------- Loading Page --------------------*/
 
@@ -27,20 +26,18 @@ canvas {
     display: flex; z-index: 100; position: absolute;
     align-items: center; flex-direction: column; 
 }
-.loading #text1 {position: absolute; top: 100px; font-size: 70px;}
+.loading #text1 {position: absolute; top: 100px; font-size: 80px;}
 .loading #text2 {position: absolute; bottom: 90px; font-size: 24px;}
 
 .progressbar {
-    height: 20px; width: 400px; background: #d8d8d8;
-    border-radius: 5px; display: flex; align-items: center;
-    position: absolute; bottom: 50px;
+    height: 20px; width: 400px; background: #d8d8d8; position: absolute;
+    border-radius: 5px; display: flex; align-items: center; bottom: 50px;
 }
 
 .progressbar #prog {
-    height: 16px; width: 0%; border-radius: 5px; margin: 0 2px 0 2px;
+    height: 16px; width: 0; border-radius: 5px; margin: 0 2px; transition-duration: 1s;
     background: linear-gradient(90deg, rgba(16,130,201,1) 25%, rgba(232,70,252,1) 100%);
 }
-
 
 /*-------------------- UI --------------------*/
 
@@ -57,6 +54,7 @@ canvas {
     display: flex; outline: none; cursor: pointer;
     justify-content: center; align-items: center;
     border: 1px solid #0072a4;
+    box-shadow: inset 0px 1px #80ccec;
 }
 
 .prov {width: calc(100% - 250px); background: #00a3e8; border-radius: 0 10px 10px 0; border: 1px solid #0072a4;} /* Provisional ! */
@@ -74,24 +72,24 @@ canvas {
     filter: drop-shadow(2px 4px 2px rgba(0,0,0,0.3))
 }
 
-.ui_stats div {display: flex; justify-content: center; align-items: center;}
+.ui_stats div {
+    display: flex; justify-content: center; align-items: center;
+    background: #00a3e8; border: 1px solid #0072a4;
+    box-shadow: inset 0px -1px #80ccec;
+}
+
+.ui_stats span {color: #327b28; margin-right: 8px;}
 
 .status {
-    height: 40px; width: 50px; background: #00a3e8;
-    border-radius: 10px 0 0 10px; border: 1px solid #0072a4;
+    height: 40px; width: 50px; border-radius: 10px 0 0 10px;
 }
 
 .overall_money {
-    height: 48px; width: 100px; background: #00a3e8; font-size: 24px;
-    border-radius: 0 0 8px 8px; border: 1px solid #0072a4;
+    height: 48px; width: 100px; font-size: 24px; border-radius: 0 0 8px 8px; 
 }
 
-.overall_money span {color: #327b28; margin-right: 10px;}
-
 .money_sec {
-    height: 40px; width: 50px; background: #00a3e8; 
-    color: #327b28; font-size: 22px;
-    border-radius: 0 10px 10px 0; border: 1px solid #0072a4;
+    height: 40px; width: 50px; font-size: 24px; border-radius: 0 8px 8px 0;
 }
 
 
@@ -120,9 +118,11 @@ canvas {
 
 /*-------------------- Overlay --------------------*/
 
+/* Build : */
+
 .overlay_build {
-    height: 600px; width: 400px;
-    background: white; position: absolute;
+    height: 600px; width: 400px; z-index: 100;
+    background: #FFF; position: absolute;
     border: 10px solid #633200; border-radius: 20px;
     flex-direction: column; align-items: center;
 }
@@ -130,8 +130,8 @@ canvas {
 .overlay_build .button {
     height: 75px; width: 350px; display: flex; outline: 0;
     background: #3c3c3c; margin-top: 10px; font-size: 24px;
-    border: 1px solid black; border-radius: 5px; padding: 0;
-    font-family: 'VT323', monospace; color: white; cursor: pointer;
+    border: 1px solid #000; border-radius: 5px; padding: 0;
+    font-family: 'VT323', monospace; color: #FFF; cursor: pointer;
 }
 
 .button span {
@@ -146,9 +146,56 @@ canvas {
     background: #cc2525; border: 2px solid #981616; cursor: pointer;
     position: absolute; top: -10px; right: -10px; padding: 0;
 }
-.close img {height: 15px; width: 15px;}
 
-    
+
+/* Starter : */
+
+.overlay_starter {
+    height: 140px; width: 200px; position: absolute;
+    grid-template-rows: 25px 75px; gap: 8px 8px; 
+    justify-content: center; align-content: center;
+    grid-template-columns: 75px 75px;
+}
+
+.overlay_starter div {
+    display: flex; justify-content: center; align-items: center;
+    background: #3c3c3c; border: 1px solid #1b1b1b; font-size: 20px;
+    box-shadow: inset 1px 1px #737373; border-radius: 5px; flex-direction: column;
+}
+
+.overlay_starter .costPerCycle, .delay {
+    height: 25px; width: 75px;
+}
+
+.overlay_starter .spawnObject, .spawnNumber {
+    height: 75px; width: 75px; 
+}
+.spawnObject span {font-size: 12px}
+
+.btn_spawnSelector {
+    height: 35px; width: 35px; background: transparent; padding: 0;
+    border: 1px solid #1b1b1b; outline: none; display: flex;
+    justify-content: center; align-content: center; cursor: pointer;
+}
+
+.overlay_spawnSelector {
+    height: 200px; width: 200px; font-size: 20px;
+    position: absolute; border-radius: 5px;
+    justify-content: center; align-content: center;
+    background: #3c3c3c; border: 1px solid #1b1b1b;
+    box-shadow: inset 1px 1px #737373; gap: 10px 10px;
+    grid-template-columns: 50px 50px; grid-template-rows: 50px 50px 50px;
+}
+
+.spawnType {
+    height: 50px; width: 50px; display: flex;
+    border-radius: 5px; outline: none; cursor: pointer;
+    justify-content: center; align-content: center;
+    background: #3c3c3c; border: 1px solid #1b1b1b;
+    box-shadow: inset 1px 1px #737373; padding: 0;
+}
+
+
 .module_selection {overflow-y: overlay; width: 400px; height: 600px; display: flex; flex-direction: column; align-items: center;}
 .module_selection::-webkit-scrollbar {width: 12px; background-color: #F5F5F5;}
 .module_selection::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); border-radius: 10px; background: #F5F5F5;}

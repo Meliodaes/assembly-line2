@@ -1,274 +1,202 @@
-//-------------------- Init --------------------
+import {grid, showOverlay, creationBarManagement} from './ui.js';
+import {buffer, ctx, canvas, files, money, module, sleep, ressources} from './init.js';
 
-//Require :
-import {Money} from './classes.js';
-import {grid, showMenu, creationBarManagement} from './ui.js';
-import {init, moduleTiles, buffer} from './init.js';
-
-//Global Var :
-var moduleId, modifType;
-var map = new Array(), turnMap = new Array(), tempArray = new Array();
-const money = new Money(6000,0);
-
-//DOM :
-export const buildMenu = document.querySelector('.overlay_build');
-export const creationBar = document.querySelector('.ui_creationBar');
-const yesNoBtn = document.querySelector('.ui_btn_yesno');
-const noBtn = document.querySelector('.btn_no');
-const uiSpendMoney = document.querySelector('.ui_moneyspend');
-
-//Canvas :
-export const canvas = document.getElementById('canvas');
-export const ctx = canvas.getContext('2d');
-
-//Launch initialisation function (buffer, etc) :
-init();
-//document.querySelector('.loading').style.display = "none"; //BYPASS
-
-//-------------------- Module Cost --------------------
-
-function moduleCost(id){
-    switch(id){
-        case 1: return 1000;
-        case 2: return 5000;
-        case 3: return 300;
-        case 4: return 10000;
-        case 5: return 10000;
-        case 6: return 10000;
-        case 7: return 20000;
-    }
-}
-
-
-//-------------------- Manage module --------------------
-
-function drawModule(id, x, y){
-    switch(id){
-        case 1: ctx.drawImage(buffer,0,0,32,32,x,y,32,32); break;
-        case 2: ctx.drawImage(buffer,32,0,32,32,x,y,32,32); break;
-        case 3: ctx.drawImage(buffer,64,0,32,32,x,y,32,32); break;
-        case 4: ctx.drawImage(buffer,96,0,32,32,x,y,32,32); break;
-        case 5: ctx.drawImage(buffer,0,32,32,32,x,y,32,32); break;
-        case 6: ctx.drawImage(buffer,32,32,32,32,x,y,32,32); break;
-        case 7: ctx.drawImage(buffer,64,32,32,32,x,y,32,32); break;
-        case "arrow": ctx.drawImage(buffer,96,32,32,32,x,y,32,32); break;
-        default: return false; break;
-    }
-}
-
-function rotateModule(col,line,opt){
-    ctx.clearRect(col*32,line*32,32,32);
-    ctx.save();
-    ctx.translate((col*32)+16,(line*32)+16);
-    ctx.rotate((turnMap[line][col]*90)*(Math.PI/180));
-    ctx.translate(-(col*32)-16,-(line*32)-16);
-    drawModule(map[line][col],col*32,line*32);
-    if(opt=="arrow") drawModule(opt,col*32,line*32);
-    ctx.restore();
-}
-
-
-//-------------------- Canvas management (event, etc) --------------------
-
-//Canvas mapping :
-for(var i=0;i<16;i++){
-    map[i] = new Array();
-    turnMap[i] = new Array();
-    for(var j=0;j<16;j++){
-        map[i][j] = 0;
-        turnMap[i][j] = 0;
-    }
-}
-
-//Click event :
-canvas.addEventListener("click", (e) => {
-    var rect = canvas.getBoundingClientRect();
-    var col = Math.trunc((e.clientX-rect.left)/32);
-    var line = Math.trunc((e.clientY-rect.top)/32);
-    var index = tempArray.indexOf("map["+line+"]["+col+"]");
-    
-    if(modifType=="build"){
-        if(map[line][col]==0 && index <= -1 && (money.tempMoney+moduleCost(moduleId)) <= money.amount){
-            tempArray.push("map["+line+"]["+col+"]");
-            ctx.fillStyle = "#3ad33a";
-            ctx.fillRect(col*32,line*32,32,32);
-            money.tempMoney += moduleCost(moduleId);
-            uiSpendMoney.innerHTML = "-$"+money.tempMoney;
-        }
-        else if(index > -1){
-            map[line][col]=0;
-            tempArray.splice(index,1);
-            ctx.clearRect(col*32,line*32,32,32);
-            money.tempMoney -= moduleCost(moduleId);
-            uiSpendMoney.innerHTML = "-$"+money.tempMoney;
-        }
-    }
-    else if(modifType=="remove"){
-        if(index <= -1 && map[line][col]!==0){
-            tempArray.push("map["+line+"]["+col+"]");
-            ctx.fillStyle = "#901818";
-            ctx.fillRect(col*32,line*32,32,32);
-            money.tempMoney += moduleCost(map[line][col]);
-            uiSpendMoney.innerHTML = "+$"+money.tempMoney;
-        }
-        else if(index > -1 && map[line][col]!==0){
-            ctx.clearRect(col*32,line*32,32,32);
-            drawModule(map[line][col],col*32,line*32);
-            rotateModule(col,line,"");
-            tempArray.splice(index,1);
-            money.tempMoney -= moduleCost(map[line][col]);
-            uiSpendMoney.innerHTML = "+$"+money.tempMoney;
-        }
-    }
-    else if(modifType=="move"){
-        if(map[line][col]!==0 && tempArray.length==0){
-            tempArray.push("map["+line+"]["+col+"]");
-            ctx.fillStyle = "#3ad33a";
-            ctx.fillRect(col*32,line*32,32,32);
-        }
-        else if(map[line][col]!==0 && tempArray.length > 0 && "map["+line+"]["+col+"]"==tempArray[0]){
-            ctx.clearRect(col*32,line*32,32,32);
-            drawModule(map[line][col],col*32,line*32);
-            rotateModule(col,line,"");
-            tempArray.splice(index,1);
-        }
-        else if(map[line][col]==0 && tempArray.length > 0){
-            var coord = (tempArray[0].match(/\d+/g).map(Number) + "").split(",");
-            map[line][col] = eval(tempArray[0]);
-            turnMap[line][col] = turnMap[coord[0]][coord[1]];
-            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
-            drawModule(map[line][col],col*32,line*32);
-            rotateModule(col,line,"");
-            map[coord[0]][coord[1]] = 0;
-            turnMap[coord[0]][coord[1]] = 0;
-            tempArray.splice(index,1);
-        }
-    }
-    else if(modifType=="turn"){
-        if(map[line][col]!==0){
-            turnMap[line][col] = (turnMap[line][col]+1)%4
-            rotateModule(col,line,"arrow");
-        }
+//Instanciate 'onclick' function
+document.querySelectorAll('button').forEach((el) => {
+    if(el.hasAttribute("onclick")){
+        var fn = el.getAttribute("onclick").substring(0,el.getAttribute("onclick").indexOf("("));
+        window[fn] = eval(fn);
     }
 });
 
 
+//-------------------- Canvas management (event, etc) --------------------
+
+export function canvasClick(e){
+    var rect = canvas.getBoundingClientRect();
+    var x = Math.trunc((e.clientX-rect.left)/32);
+    var y = Math.trunc((e.clientY-rect.top)/32);
+    
+    if(module.modifType=="idle" && module.exist("cases",x,y)){
+        if(module.cases[x+','+y].id==1){
+            showOverlay('starter',x,y);
+            document.querySelector('.costPerCycle').innerHTML = "$"+module.cases[x+','+y].costPerCycle;
+            document.querySelector('.delay').innerHTML = module.cases[x+','+y].delay+"s";
+            document.querySelector('.overlay_starter').children[3].querySelector('img').src = "src/media/ressources/"+module.cases[x+','+y].spawnObject+".png";
+        }
+    }
+    else if(module.modifType=="build"){
+        if(!module.exist("cases",x,y) && !module.exist("temp",x,y) && money.tempMoney+module.getPrice(module.tempId) <= money.amount){
+            module.add("temp",x,y,module.tempId,0);
+            ctx.fillStyle = "#3ad33a";
+            ctx.fillRect(x*32,y*32,32,32);
+            money.tempMoney += module.getPrice(module.tempId);
+            document.querySelector('.ui_moneyspend').innerHTML = "-$"+money.tempMoney;
+        }
+        else if(!module.exist("cases",x,y) && module.exist("temp",x,y)){
+            module.delete("temp",x,y);
+            ctx.clearRect(x*32,y*32,32,32);
+            money.tempMoney -= module.getPrice(module.tempId);
+            document.querySelector('.ui_moneyspend').innerHTML = "-$"+money.tempMoney;
+        }
+    }
+    else if(module.modifType=="remove"){
+        if(module.exist("cases",x,y) && !module.exist("temp",x,y)){
+            module.add("temp",x,y,module.cases[x+","+y].id,0,0,0);
+            ctx.fillStyle = "#901818";
+            ctx.fillRect(x*32,y*32,32,32);
+            money.tempMoney += module.getPrice(module.cases[x+','+y].id)*90/100;
+            document.querySelector('.ui_moneyspend').innerHTML = "+$"+money.tempMoney;
+        }
+        else if(module.exist("cases",x,y) && module.exist("temp",x,y)){
+            ctx.clearRect(x*32,y*32,32,32);
+            module.draw(module.cases[x+','+y].id,x,y);
+            module.rotate(x,y)
+            module.delete("temp",x,y);
+            money.tempMoney -= module.getPrice(module.cases[x+','+y].id)*90/100;
+            document.querySelector('.ui_moneyspend').innerHTML = "+$"+money.tempMoney;
+        }
+    }
+    else if(module.modifType=="move"){
+        if(module.exist("cases",x,y) && module.isEmpty("temp")){
+            module.add("temp",x,y,module.cases[x+','+y].id,module.cases[x+','+y].rotation);
+            ctx.fillStyle = "#3ad33a";
+            ctx.fillRect(x*32,y*32,32,32);
+        }
+        else if(module.exist("cases",x,y) && module.exist("temp",x,y)){
+            ctx.clearRect(x*32,y*32,32,32);
+            module.rotate(x,y);
+            module.delete("temp",x,y);
+        }
+        else if(!module.exist("cases",x,y) && !module.isEmpty("temp")){
+            var coord = Object.keys(module.temp)[0].split(',');
+            var value = module.temp[Object.keys(module.temp)[0]];
+            ctx.clearRect(coord[0]*32,coord[1]*32,32,32);
+            module.delete("cases",coord[0],coord[1]);
+            module.add("cases",x,y,value.id,value.rotation);
+            module.rotate(x,y);
+            module.delete("temp",coord[0],coord[1]);
+        }
+    }
+    else if(module.modifType=="turn"){
+        if(module.exist("cases",x,y)){
+            module.cases[x+','+y].rotation = (module.cases[x+','+y].rotation+1)%4;
+            module.rotate(x,y,0);
+        }
+    }
+}
+
+
 //-------------------- Preview for modification --------------------
 
-export function modifPreview(type, id=0){
-    if(type == "build" && id!==0){
-        buildMenu.style.display = "none";
-        uiSpendMoney.style.display = "flex";
-        uiSpendMoney.innerHTML = "-$0000";
-        moduleId = id;
+function modifPreview(type, id){
+    if(type == "build"){
+        document.querySelector('.overlay_build').style.display = "none";
+        document.querySelector('.ui_moneyspend').style.display = "flex";
+        document.querySelector('.ui_moneyspend').innerHTML = "-$0000";
+        module.tempId = id;
     }
     else if(type == "remove"){
         creationBarManagement("remove", true);
-        uiSpendMoney.style.display = "flex";
-        uiSpendMoney.innerHTML = "+$0000";
+        document.querySelector('.ui_moneyspend').style.display = "flex";
+        document.querySelector('.ui_moneyspend').innerHTML = "+$0000";
     }
     else if(type == "move"){
-        noBtn.style.display = "none";
+        document.querySelector('.btn_no').style.display = "none";
         creationBarManagement("move", true);
     }
     else if(type == "turn"){
-        noBtn.style.display = "none";
+        document.querySelector('.btn_no').style.display = "none";
         creationBarManagement("turn", true);
-        for(var i=0;i<16;i++){
-            for(var j=0;j<16;j++){
-                if(map[i][j]!==0){
-                    tempArray.push("map["+i+"]["+j+"]");
-                    drawModule("arrow",j*32,i*32);
-                    rotateModule(j,i,"arrow");
-                }
-            }
+        for(const el in module.cases){
+            module.rotate(el.split(',')[0],el.split(',')[1],0);
         }
     }
     
-    yesNoBtn.style.display = "block";
-    modifType = type;
+    document.querySelector('.ui_btn_yesno').style.display = "block";
+    module.modifType = type;
     grid(true);
 }
 
 
 //-------------------- Accept/Cancel modification --------------------
 
-export function accept(){
-    if(modifType == "build" && tempArray.length > 0){
-        for(var o=0;o<tempArray.length;o++){
-            var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
-            map[coord[0]][coord[1]] = moduleId;
-            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
-            drawModule(moduleId,coord[1]*32,coord[0]*32);
+function accept(){
+    if(module.modifType == "build" && !module.isEmpty("temp")){
+        for(const el in module.temp){
+            ctx.clearRect(el.split(',')[0]*32,el.split(',')[1]*32,32,32);
+            module.draw(module.temp[el].id,el.split(',')[0],el.split(',')[1]);
+            module.add("cases",el.split(',')[0],el.split(',')[1],module.temp[el].id, module.temp[el].rotation);
+            module.delete("temp",el.split(',')[0],el.split(',')[1]);
         }
-        money.sub(money.tempMoney);
+        money.change(-money.tempMoney);
     }
-    else if(modifType == "remove" && tempArray.length > 0){
-        for(var o=0;o<tempArray.length;o++){
-            var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
-            map[coord[0]][coord[1]] = 0;
-            turnMap[coord[0]][coord[1]] = 0;
-            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+    
+    else if(module.modifType == "remove" && !module.isEmpty("temp")){
+        for(const el in module.temp){
+            ctx.clearRect(el.split(',')[0]*32,el.split(',')[1]*32,32,32);
+            clearInterval(module.cases[el].cycle);
+            module.delete("cases",el.split(',')[0],el.split(',')[1]);
+            module.delete("temp",el.split(',')[0],el.split(',')[1]);
         }
-        money.add(money.tempMoney);
+        money.change(money.tempMoney);
     }
-    else if(modifType == "move" && tempArray.length!==0){
-        var coord = (tempArray[0].match(/\d+/g).map(Number) + "").split(",");
-        ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
-        drawModule(map[coord[0]][coord[1]],coord[1]*32,coord[0]*32);
-        rotateModule(coord[1],coord[0],"");
+    
+    else if(module.modifType == "move" && !module.isEmpty("temp")){
+        var coord = Object.keys(module.temp)[0].split(',');
+        ctx.clearRect(coord[0]*32,coord[1]*32,32,32);
+        module.rotate(coord[0],coord[1]);
+        module.delete("temp",coord[0],coord[1])
     }
-    else if(modifType == "turn"){
-        for(var o=0;o<tempArray.length;o++){
-            var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
-            rotateModule(coord[1],coord[0],"");
+    
+    else if(module.modifType == "turn"){
+        for(const el in module.cases){
+            ctx.clearRect(el.split(',')[0]*32,el.split(',')[1]*32,32,32)
+            module.rotate(el.split(',')[0],el.split(',')[1]);
         }
     }
+    
     grid(false);
-    modifType = "";
-    tempArray = [];
+    creationBarManagement(module.modifType, false);
+    module.modifType = "idle";
+    module.tempId = 0;
     money.tempMoney = 0;
-    yesNoBtn.style.display = "none";
-    uiSpendMoney.style.display = "none";
-    noBtn.style.display = "inline-block";
-    creationBarManagement(modifType, false);
+    document.querySelector('.ui_btn_yesno').style.display = "none";
+    document.querySelector('.ui_moneyspend').style.display = "none";
+    document.querySelector('.btn_no').style.display = "inline-block";
 }
 
-export function cancel(){
-    if(modifType == "build" && tempArray.length > 0){
-        for(var o=0;o<tempArray.length;o++){
-            var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
-            map[coord[0]][coord[1]]=0;
-            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
+    
+function cancel(){
+    if(module.modifType == "build" && !module.isEmpty("temp")){
+        for(const el in module.temp){
+            ctx.clearRect(el.split(',')[0]*32,el.split(',')[1]*32,32,32);
+            module.delete("temp",el.split(',')[0],el.split(',')[1]);
         }
     }
-    else if(modifType == "remove" && tempArray.length > 0){
-        for(var o=0;o<tempArray.length;o++){
-            var coord = (tempArray[o].match(/\d+/g).map(Number) + "").split(",");
-            ctx.clearRect(coord[1]*32,coord[0]*32,32,32);
-            drawModule(map[coord[0]][coord[1]],coord[1]*32,coord[0]*32);
-            rotateModule(coord[1],coord[0],"");
+    
+    else if(module.modifType == "remove" && !module.isEmpty("temp")){
+        for(const el in module.temp){
+            ctx.clearRect(el.split(',')[0]*32,el.split(',')[1]*32,32,32);
+            module.rotate(el.split(',')[0],el.split(',')[1]);
+            module.delete("temp",el.split(',')[0],el.split(',')[1]);
         }
     }
+    
     grid(false);
-    modifType = "";
-    tempArray = [];
+    creationBarManagement(module.modifType, false);
+    module.modifType = "idle";
+    module.tempId = 0;
     money.tempMoney = 0;
-    yesNoBtn.style.display = "none";
-    uiSpendMoney.style.display = "none";
-    creationBarManagement(modifType, false);
+    document.querySelector('.ui_btn_yesno').style.display = "none";
+    document.querySelector('.ui_moneyspend').style.display = "none";
 }
 
 
 //-------------------- Debug --------------------
 
-//document.addEventListener("keydown",(e)=>{
-//    if(e.keyCode == 96){
-//        progBarGoTo(50);
-//    }
-//});
-
-
-
-
-
+document.addEventListener("keydown",async (e) => {
+    if(e.keyCode == 96){
+//        console.log(module.cases);
+    }
+});
