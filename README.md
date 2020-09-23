@@ -3,14 +3,13 @@ Assembly Line² is an unofficial port of the mobile game Assembly Line.
 This port keeps orignal "mind" of the game, with some adjustments and new things.  
 
 ### Actual State :
-**New :** Resource spawning and cycle management for "Starter" (every 3 seconds each starter use 5$ to work)  
-You can "play" demo here : [Assembly Line²](https://swncake.github.io/assembly-line2/index.html)  
+**This project is currently discontinued due to my studies**  
+You can play demo here : [Assembly Line²](https://meliodaes.github.io/assembly-line2/index.html)  
 
-### Known Issues :
+### Known Issues (fixed in next update) :
 - Bug with resources when there are more than one starter  
 - Bug with resources when many resources come to "Seller"  
 - Overlay built only for 1920x1080 screen  
-- Resource spawning animation depends on computer frame rate, not internal game frame rate
 
 ### RoadMap :
 - [x] HTML / JS base (100%)
@@ -31,6 +30,7 @@ You can "play" demo here : [Assembly Line²](https://swncake.github.io/assembly-
 - [ ] Save management
 - [ ] Possibility to move and zoom in/out canvas (like mobile game)
 
-
-### Author :
-@SwnCake :)
+### About original game :
+I made this project because I love Assembly Line, but the game is discontinued since 2018. I found many bug/adjustments that can "revive" this game.
+Make sure to play original game to reward his authors : 
+- [Android Store](https://play.google.com/store/apps/details?id=com.olympus.assemblyline&hl=en_US)  
