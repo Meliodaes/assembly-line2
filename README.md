@@ -31,6 +31,6 @@ You can play demo here : [Assembly Line²](https://meliodaes.github.io/assembly-
 - [ ] Possibility to move and zoom in/out canvas (like mobile game)
 
 ### About original game :
-Original game was disxcontinued since 2018, but I love this game. I found many bug/adjustments that can "revive" it.  
+Original game was discontinued since 2018, but I love this game. I found many bug/adjustments that can "revive" it.  
 Make sure to play to the original game to reward its authors : 
 - [Android Store](https://play.google.com/store/apps/details?id=com.olympus.assemblyline&hl=en_US)  
