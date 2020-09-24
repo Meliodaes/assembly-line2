@@ -1,9 +1,9 @@
 # Assembly Line²
 Assembly Line² is an unofficial port of the mobile game Assembly Line.  
-This port keeps orignal "mind" of the game, with some adjustments and new things.  
+This project keeps orignal "mind" of the game, with some adjustments and new things.  
 
 ### Actual State :
-**This project is currently discontinued due to my studies**  
+**This project is currently discontinued due to my studies...**  
 You can play demo here : [Assembly Line²](https://meliodaes.github.io/assembly-line2/index.html)  
 
 ### Known Issues (fixed in next update) :
@@ -31,6 +31,6 @@ You can play demo here : [Assembly Line²](https://meliodaes.github.io/assembly-
 - [ ] Possibility to move and zoom in/out canvas (like mobile game)
 
 ### About original game :
-I made this project because I love Assembly Line, but the game is discontinued since 2018. I found many bug/adjustments that can "revive" this game.
+Original game was disxcontinued since 2018, but I love this game. I found many bug/adjustments that can "revive" it.
 Make sure to play original game to reward his authors : 
 - [Android Store](https://play.google.com/store/apps/details?id=com.olympus.assemblyline&hl=en_US)  
