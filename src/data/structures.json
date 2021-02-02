@@ -1,0 +1,7 @@
+{
+    "starter" : {
+        "price": 1000,
+        "costPerCycle": 5,
+        "delay": 3
+    }
+}
