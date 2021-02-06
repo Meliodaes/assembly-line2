@@ -2,12 +2,16 @@
 
 @keyframes screenFadeIn {
     from {opacity: 1;}
-    to {opacity: 0;}
+    to {opacity: 0; visibility: hidden;}
 }
 
 body {
     height: 100vh; width: 100vw; margin: 0; padding: 0; 
     font-family: 'VT323', monospace; color: #FFF;
+}
+
+p {
+    margin: 0;
 }
 
 /* ---------- Layout ---------- */
@@ -31,10 +35,10 @@ body {
     display: none; height: 100vh; width: 100vw;
     justify-content: center; background: #333;
 }
-.overlay-scoreboard {
-    display: flex; height: 100px; width: 500px; font-size: 60px;
-    justify-content: center; align-items: center;
+.overlay-dashboard {
+    display: flex; height: 100px; width: 500px; font-size: 35px;
+    justify-content: center; align-items: center; flex-direction: column;
     background: #464646; border: 1px solid black;
     border-radius: 0 0 10px 10px; border-top: none;
-    box-shadow: inset 0px -4px 2px 3px #747474c4, 0px 0px 15px -4px #777;
+    box-shadow: inset 0px -4px 2px 3px #747474c4, 4px 4px 4px 1px #000;
 }

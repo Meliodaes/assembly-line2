@@ -3,6 +3,7 @@ export function sleep(ms){
 }
 
 export function screenAnimation(identifier, anim) {
+    document.querySelector(identifier).style.display = "block";
     document.querySelector(identifier).style.animation = `2s ease-in 0s 1 normal forwards running ${anim}`;
 }
 

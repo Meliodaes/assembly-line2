@@ -1,7 +1,26 @@
 {
-    "starter" : {
+    "electrical_generator" : {
+        "price": 500,
+        "cycleDelay": 3,
+        "consumptionPerCycle": {
+            "electricity": 1,
+            "money": 0
+        },
+        "rewardPerCycle": {
+            "electricity": 2,
+            "money": 0
+        }
+    },
+    "miner" : {
         "price": 1000,
-        "costPerCycle": 5,
-        "delay": 3
+        "cycleDelay": 3,
+        "consumptionPerCycle": {
+            "electricity": 2,
+            "money": 100
+        },
+        "rewardPerCycle": {
+            "electricity": 0,
+            "money": 0
+        }
     }
 }
